@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+<head>
+    <title>PasswordStrengthSonification</title>
+    <script type="text/javascript" src="../dep/base/Tone.js"></script>
+    <script type="text/javascript" src="../dep/estimator/zxcvbn.js"></script>
+    <script type="module" src="../scripts/PWSon_InverseParkingSensor.js"></script>
+</head>
+
+<body>
+    <div class="centerbox">
+        <p>
+            <h1>Password Strength Sonification Example</h1>
+        </p>
+        <form action="javascript:void(0);">
+            <!-- prevents form submit / page reloading on Enter press in textinput-->
+            <p id="passwordarea">
+
+                <span style="font-size: 1.5em;">Password to test: <input type="password" id="pwd" value=""> </span>
+                <input type="checkbox" id="showPassword"><label for="showPassword"> show password</label> &emsp; &emsp;
+                <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound
+                    active</label>
+            </p>
+
+            <p id="output" style="height:200px; font-size: small">Password infos<br></p>
+    </div>
+
+    <script type="module">
+        import { PWSon_InverseParkingSensor } from '../scripts/PWSon_InverseParkingSensor.js'
+
+        /* ---- procedure ---- */
+
+        let sonification = new PWSon_InverseParkingSensor()
+        sonification.setupSonification()
+        registerInputEvents()
+
+
+        /* ---- functions ---- */
+
+        function registerInputEvents() {
+            // register event listener for input (doesn't matter if it's key up or down -> on every input change)
+            document.getElementById("pwd").addEventListener('input', (e) => {
+                checkPwdAndPlaySound(document.getElementById("pwd").value)
+            });
+            document.getElementById("showPassword").addEventListener('change', (e) => {
+                var pwinput = document.getElementById("pwd");
+                if (e.target.checked) {
+                    pwinput.type = "text";
+                } else {
+                    pwinput.type = "password";
+                }
+            });
+            document.getElementById("soundActive").addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    sonification.volume.mute = false
+                } else {
+                    sonification.volume.mute = true
+                }
+            });
+        }
+
+        function checkPwdAndPlaySound(pwd) {
+            var res = zxcvbn(pwd);
+            // ourScore is between 0 and 10 (capped at 10). Good from 8.0 (more than 10 years online attack.). Or from 7.0 (more than 9 months online attack)             
+            var ourScore = res.guesses_log10 / 1.2
+            if (ourScore > 10) { ourScore = 10 }
+
+            var text = "Password infos<br> <br>"
+            text += "Our Password score: " + ourScore.toFixed(1) + "/10"
+            document.getElementById("output").innerHTML = text
+
+            sonification.updateSonification(ourScore)//, pwd.length)
+        }
+
+
+    </script>
+
+</body>
+
+</html>
