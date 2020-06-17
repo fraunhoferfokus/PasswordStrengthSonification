@@ -1,15 +1,15 @@
 import { PWSon_Base } from './PWSon_Base.js';
-export { PWSon_InverseParkingSensor }
+export { InverseParkingSensor }
 
 
-class PWSon_InverseParkingSensor extends PWSon_Base {
+class InverseParkingSensor extends PWSon_Base {
     constructor(audioOutput = null) {
         super(audioOutput)
         this.synth = new Tone.Synth()
         this.synth.connect(this.reverb)
         this.noteEvent = new Tone.Event()
-        //this.synth.envelope.attack = 0.001
-        //this.synth.envelope.release = 0.2
+        this.synth.envelope.attack = 0.001
+        this.synth.envelope.release = 0.2
     }
 
     setupSonification() {
@@ -25,7 +25,11 @@ class PWSon_InverseParkingSensor extends PWSon_Base {
     }
 
     updateSonification(score) {
-        super.updateSonification(score)
+        updateSonification(score, Number.MAX_SAFE_INTEGER) // covers any possible minimum number of characters that could be configured
+    }
+
+    updateSonification(score, numberCharacters) {
+        super.updateSonification(score, numberCharacters)
 
         let deltaT = 0.0001 * Math.pow(this.currentScore, 5) / 2
         deltaT = Math.max(deltaT, 0.01) // minimal deltaT = 0.01
@@ -35,7 +39,7 @@ class PWSon_InverseParkingSensor extends PWSon_Base {
         });
 
         if (this.currentScore > this.goodEnoughThreshold) {
-            this.reverb.wet.value = this.reverbWetAmountOnGoodEnoughScore
+            this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore
         }
         else { this.reverb.wet.value = 0 }
     }

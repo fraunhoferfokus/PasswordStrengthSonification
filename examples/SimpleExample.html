@@ -4,9 +4,9 @@
 
 <head>
     <title>PasswordStrengthSonification</title>
-    <script type="text/javascript" src="../dep/base/Tone.js"></script> 
-    <script type="text/javascript" src="../dep/estimator/zxcvbn.js"></script>
-    <script type="module" src="../scripts/PWSon_InverseParkingSensor.js"></script>
+    <!--<script type="text/javascript" src="../dep/base/Tone.js"></script> -->
+    <!--<script type="text/javascript" src="../dep/estimator/zxcvbn.js"></script>-->
+    <!--<script type="module" src="../scripts/InverseParkingSensor.js"></script>-->
     <link rel="stylesheet" type="text/css" href="style_examples.css">
 </head>
 
@@ -17,24 +17,48 @@
         </p>
         <form action="javascript:void(0);"><!-- prevents form submit / page reloading on Enter press in textinput-->
             <p id="passwordarea">
-                <span style="font-size: 1.5em;">Password to test: <input type="password" id="pwd" value=""> </span>
-                <input type="checkbox" id="showPassword"><label for="showPassword"> show password</label> &emsp; &emsp;
-                <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound active</label>
+                <table><tr>
+                    <td><span class="largeFont">Password to test: <input type="password" id="pwd" value=""> </span></td>
+                    <td><input type="checkbox" id="showPassword"><label for="showPassword"> show password</label> &emsp; &emsp;
+                        <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound active</label></td></tr>
+                <tr><td></td>
+                    <td><input type="checkbox" id="enableCommonPWCheck" checked><label for="enableCommonPWCheck">enable checking and feedback for the 100k most common passwords</label></td></tr>
+                <tr><td></td>
+                    <td><input type="checkbox" id="enableGradualVolumeAtFewCharacters" checked><label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at the first few characters</label></td></tr></table>
             </p>
-            <p id="output" style="height:200px; font-size: small">Password infos<br></p>
+            <p id="pwInfoOutput" class="pwInfoOutput">Password infos: -<br></p>
         </div></form>
 
     <script type="module">
-        import { PWSon_InverseParkingSensor } from '../scripts/PWSon_InverseParkingSensor.js'
+        import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js'
+        import { PasswordChecker } from '../scripts/PasswordChecker.js'
+        import {loadAndExecuteScript} from '../scripts/PWSon_HelperFunctions.js'
 
         /* ---- procedure ---- */
-
-        let sonification = new PWSon_InverseParkingSensor()
+        loadAndExecuteScript("../dep/base/Tone.js")
+        let sonification = new InverseParkingSensor()
+        let passwordchecker = new PasswordChecker()
         sonification.setupSonification()
+    
         registerInputEvents()
 
 
         /* ---- functions ---- */
+
+        function checkPwdAndPlaySound(pwd) {
+            let text = "Password infos:<br> <br>"
+            let pwdResult = passwordchecker(pwd)
+            
+            if (pwdResult.isCommonPW) {
+                ourScore = 0
+                text += "Password is one of the 100k most common passwords, hence score=0!<br><br>"
+                sonification.playCommonPWEventSound()
+            }
+
+            text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
+            document.getElementById("pwInfoOutput").innerHTML = text
+            sonification.updateSonification(pwdResult.score, pwd.length)            
+        }
 
         function registerInputEvents() {
             // register event listener for input (doesn't matter if it's key up or down -> on every input change)
@@ -56,21 +80,21 @@
                     sonification.volume.mute = true
                 }
             });
+            document.getElementById("enableGradualVolumeAtFewCharacters").addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    sonification.enableGradualVolumeAtFewCharacters = true
+                } else {
+                    sonification.enableGradualVolumeAtFewCharacters = false
+                }
+            });
+            document.getElementById("enableCommonPWCheck").addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    passwordchecker.enableCommonPWCheck = true
+                } else {
+                    passwordchecker.enableCommonPWCheck = false
+                }
+            });
         }
-
-        function checkPwdAndPlaySound(pwd) {
-            var res = zxcvbn(pwd);
-            // ourScore is between 0 and 10 (capped at 10). Good from 8.0 (more than 10 years online attack.). Or from 7.0 (more than 9 months online attack)             
-            var ourScore = res.guesses_log10 / 1.2
-            if (ourScore > 10) { ourScore = 10 }
-
-            var text = "Password infos<br> <br>"
-            text += "Our Password score: " + ourScore.toFixed(1) + "/10"
-            document.getElementById("output").innerHTML = text
-
-            sonification.updateSonification(ourScore)//, pwd.length)
-        }
-
 
     </script>
 </body>

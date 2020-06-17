@@ -1,4 +1,4 @@
-import { rand } from './HelperFunctions.js'
+import { rand } from './PWSon_HelperFunctions.js'
 import { convolutionReverbFile } from './PWSon_Base.js'
 export { DroneSynth }
 
