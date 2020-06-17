@@ -12,8 +12,8 @@ class InverseParkingSensor extends PWSon_Base {
         this.synth.envelope.release = 0.2
     }
 
-    setupSonification() {
-        super.setupSonification()
+    init() {
+        super.init()
         var _this = this // we need the reference to instance in inline function, where 'this' means the inline function itself
         this.noteEvent = new Tone.Event(function (time, param) { 
             _this.synth.triggerAttackRelease(440, '16n') }, 0);
@@ -38,7 +38,7 @@ class InverseParkingSensor extends PWSon_Base {
             "loopEnd": deltaT,
         });
 
-        if (this.currentScore > this.goodEnoughThreshold) {
+        if (this.currentScore > this._goodEnoughThreshold) {
             this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore
         }
         else { this.reverb.wet.value = 0 }

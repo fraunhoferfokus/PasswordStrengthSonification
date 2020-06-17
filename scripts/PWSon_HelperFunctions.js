@@ -1,38 +1,17 @@
-export { isBoolean, isDefined, isFunction, isObject, loadAndExecuteScript, rand }
+export { isBoolean, isDefined, isFunction, isObject, loadScript, rand }
 
 const isBoolean = val => typeof val === 'boolean'
 const isDefined = val => typeof val !== 'undefined'
 const isFunction = val => typeof val === 'function'
 const isObject = val => typeof val === 'object'
 
-function loadAndExecuteScript(scriptUrl) {
-    // wait until script is loaded before proceeding
+function attachScriptToHead(scriptUrl) {
+    let req = new XMLHttpRequest()
+    //req.timeout = 4000;  // Reduce default 2mn-like timeout to 4s
+    req.open("GET", scriptUrl, false);
+    req.send();
+    return req;
 
-    let res = loadScript(scriptUrl)
-    .then(text => { eval(text) })
-    
-    //.catch(err => { console.log("Error in loadAndExecuteScript " + scriptUrl + " : " + err)})
-    /*let res = (async () => {
-        await fetch(scriptUrl)
-        if (res.ok) { // if HTTP-status is 200-299
-            let text = await res.text()
-            eval(text)
-        } else {
-            throw Error("loadAndExecuteScript: HTTP-Error: " + res.status);
-        }
-    })().then(() => { return })*/
-
-
-    /*     let res = (async () => {
-        await fetch(scriptUrl)
-        if (res.ok) { // if HTTP-status is 200-299
-            let text = await res.text()
-            eval(text)
-        } else {
-            throw Error("loadAndExecuteScript: HTTP-Error: " + response.status);
-        }
-    })().then {return}
-    */
 }
 
 async function loadScript(scriptUrl) {

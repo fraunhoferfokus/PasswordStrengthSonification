@@ -4,9 +4,8 @@
 
 <head>
     <title>PasswordStrengthSonification</title>
-    <!--<script type="text/javascript" src="../dep/base/Tone.js"></script> -->
-    <!--<script type="text/javascript" src="../dep/estimator/zxcvbn.js"></script>-->
-    <!--<script type="module" src="../scripts/InverseParkingSensor.js"></script>-->
+    <script type="text/javascript" src="../dep/base/Tone.js"></script>
+    <script type="text/javascript" src="../dep/estimator/zxcvbn.js"></script>
     <link rel="stylesheet" type="text/css" href="style_examples.css">
 </head>
 
@@ -24,7 +23,7 @@
                 <tr><td></td>
                     <td><input type="checkbox" id="enableCommonPWCheck" checked><label for="enableCommonPWCheck">enable checking and feedback for the 100k most common passwords</label></td></tr>
                 <tr><td></td>
-                    <td><input type="checkbox" id="enableGradualVolumeAtFewCharacters" checked><label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at the first few characters</label></td></tr></table>
+                    <td><input type="checkbox" id="enableGradualVolumeAtFewCharacters"><label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at the first few characters</label></td></tr></table>
             </p>
             <p id="pwInfoOutput" class="pwInfoOutput">Password infos: -<br></p>
         </div></form>
@@ -32,13 +31,12 @@
     <script type="module">
         import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js'
         import { PasswordChecker } from '../scripts/PasswordChecker.js'
-        import {loadAndExecuteScript} from '../scripts/PWSon_HelperFunctions.js'
-
+    
         /* ---- procedure ---- */
-        loadAndExecuteScript("../dep/base/Tone.js")
         let sonification = new InverseParkingSensor()
         let passwordchecker = new PasswordChecker()
-        sonification.setupSonification()
+        sonification.init()
+        passwordchecker.init()
     
         registerInputEvents()
 
@@ -47,10 +45,9 @@
 
         function checkPwdAndPlaySound(pwd) {
             let text = "Password infos:<br> <br>"
-            let pwdResult = passwordchecker(pwd)
+            let pwdResult = passwordchecker.checkPwd(pwd)
             
             if (pwdResult.isCommonPW) {
-                ourScore = 0
                 text += "Password is one of the 100k most common passwords, hence score=0!<br><br>"
                 sonification.playCommonPWEventSound()
             }
