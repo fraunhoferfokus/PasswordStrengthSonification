@@ -1,4 +1,5 @@
 import { PWSon_Base } from './PWSon_Base.js';
+import "../dep/base/Tone.js"
 export { InverseParkingSensor }
 
 

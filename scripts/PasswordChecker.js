@@ -1,4 +1,4 @@
-//import { zxcvbn } from '../dep/estimator/zxcvbn.js';
+import "../dep/estimator/zxcvbn.js"
 import { loadScript } from './PWSon_HelperFunctions.js'
 export { PasswordChecker }
 

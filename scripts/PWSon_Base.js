@@ -1,15 +1,11 @@
 import { isBoolean } from './PWSon_HelperFunctions.js'
+import "../dep/base/Tone.js"
 export { PWSon_Base, convolutionReverbFile }
 
-const convolutionReverbFile = '../dep/base/stalbans_a_ortf.mp3' // Impulse response from Lady Chapel, St. Albans Cathedral (Marcin Gorzel, Gavin Kearney, Aglaia Foteinou, Sorrel Hoare, Simon Shelley, Audiolab, University of York, www.openairlib.net)
+const convolutionReverbFile = '../dep/base/convReverb.mp3' // Impulse response from Lady Chapel, St. Albans Cathedral (Marcin Gorzel, Gavin Kearney, Aglaia Foteinou, Sorrel Hoare, Simon Shelley, Audiolab, University of York, www.openairlib.net)
 
 class PWSon_Base {
     constructor(audioOutput = null) {
-        /* TODO // check if Tone.js is existing/defined, otherwise load it 
-        if (typeof Tone === 'undefined') {
-            //TODO loader ("../dep/base/Tone.js")
-        }*/
-
         /* state properties */
         this.currentScore = 0
         this.lastNumberCharacters = 0
