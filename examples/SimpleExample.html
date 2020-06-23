@@ -28,13 +28,16 @@
 
     <script type="module">
         /** load the password sonification itself and the password checker module to calculate the password score */
-        import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js'
+        //import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js' TwoTones
+        //import { TwoTones } from '../scripts/TwoTones.js'
+        //import { NoiseToHarmonic } from '../scripts/NoiseToHarmonic.js'
+        import { EncryptedTransmission } from '../scripts/EncryptedTransmission.js'
         import { PasswordChecker } from '../scripts/PasswordChecker.js'
         
     
         /** ---- procedure ---- */
         /** create new objects for the sonification and password checker, and initialize them before use (important!)*/
-        let sonification = new InverseParkingSensor()
+        let sonification = new EncryptedTransmission()
         let passwordchecker = new PasswordChecker()
         sonification.init()
         passwordchecker.init()

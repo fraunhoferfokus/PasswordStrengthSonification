@@ -1,7 +1,7 @@
 /** Helper functions used in several modules
  * @module 
 */
-export { isBoolean, isDefined, isFunction, isObject, loadScript, rand }
+export { isBoolean, isDefined, isFunction, isObject, loadScript, rand, scaleBetweenTwoRanges }
 
 const isBoolean = val => typeof val === 'boolean'
 const isDefined = val => typeof val !== 'undefined'
@@ -43,3 +43,16 @@ async function loadScript(scriptUrl) {
 function rand(min, max) {
     return min + Math.random() * (max - min)
 }
+
+/** scale a value in a certain range to a different range
+ * @param {number} valueA the value to be scaled
+ * @param {number} minA the minimum value in range A
+ * @param {number} maxA the maximum value in range A
+ * @param {number} minB the minimum value in range B
+ * @param {number} maxB the maximum value in range B
+ * @returns {number} scaled value
+ */
+function scaleBetweenTwoRanges(valueA, minA, maxA, minB, maxB) {
+    return (valueA - minA) * (maxB - minB) / (maxA - minA) + minB
+}
+
