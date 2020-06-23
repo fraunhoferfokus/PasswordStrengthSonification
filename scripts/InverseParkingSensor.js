@@ -3,7 +3,7 @@
  * @module
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
-import { PWSon_Base } from './PWSon_Base.js';
+import { PWSon_Base } from './PWSon_Base.js'
 import '../dep/base/Tone.js'
 export { InverseParkingSensor }
 
@@ -24,7 +24,7 @@ class InverseParkingSensor extends PWSon_Base {
         this.synth.envelope.release = 0.2
     }
 
-    /** initialize inverse parking sensor sonification */
+    /** initialize sonification */
     init() {
         super.init()
         var _this = this // we need the reference to instance in inline function, where 'this' means the inline function itself
@@ -40,9 +40,9 @@ class InverseParkingSensor extends PWSon_Base {
 
     /** update password sonification with new score
      * @param {number} score score, between 0 and 10
-     * @param {numberCharacters=} numberCharacters number of characters typed (for gradual fade-in). The default value for numberCharacters is Number.MAX_SAFE_INTEGER, so higher than any possible minimum number of characters that could be configured. Therefore, if numberCharacters is not specified, no fade-in is performed.
-    */
-    updateSonification(score, numberCharacters=Number.MAX_SAFE_INTEGER) { 
+     * @param {numberCharacters=} numberCharacters number of characters typed (for gradual fade-in).
+     */
+    updateSonification(score, numberCharacters = this.lastNumberCharacters) {
         super.updateSonification(score, numberCharacters)
 
         let deltaT = 0.0001 * Math.pow(this.currentScore, 5) / 2
