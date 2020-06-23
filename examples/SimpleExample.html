@@ -12,7 +12,7 @@
         <p>
             <h1>Password Strength Sonification Example</h1>
         </p>
-        <form action="javascript:void(0);"><!-- prevents form submit / page reloading on Enter press in textinput-->
+        <form action="javascript:void(0);"><!-- javascript:void(0); prevents form submit / page reloading on Enter press in password input field -->
             <p id="passwordarea">
                 <table><tr>
                     <td><span class="largeFont">Password to test: <input type="password" id="pwd" value=""> </span></td>
@@ -27,21 +27,31 @@
         </div></form>
 
     <script type="module">
+        /** load the password sonification itself and the password checker module to calculate the password score */
         import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js'
         import { PasswordChecker } from '../scripts/PasswordChecker.js'
         
     
-        /* ---- procedure ---- */
+        /** ---- procedure ---- */
+        /** create new objects for the sonification and password checker, and initialize them before use (important!)*/
         let sonification = new InverseParkingSensor()
         let passwordchecker = new PasswordChecker()
         sonification.init()
         passwordchecker.init()
     
+        /** register input events of the document (e.g. password field input, etc.) with the corresponding callback functions */
         registerInputEvents()
 
+        /** that's it - procedure finished. */
 
-        /* ---- functions ---- */
 
+        /** ---- functions ---- */
+
+        /** check password and play sound: 
+         * use the PasswordChecker object to estimate the password strength and determine if it is a common password.
+         * then, update the sonification accordingly and display the password information on the screen
+         * @param {String} pwd the password
+         */
         function checkPwdAndPlaySound(pwd) {
             let text = "Password infos:<br> <br>"
             let pwdResult = passwordchecker.checkPwd(pwd)
@@ -56,6 +66,7 @@
             sonification.updateSonification(pwdResult.score, pwd.length)            
         }
 
+        /** register input events with the corresponding callback functions */ 
         function registerInputEvents() {
             // register event listener for input (doesn't matter if it's key up or down -> on every input change)
             document.getElementById("pwd").addEventListener('input', (e) => {

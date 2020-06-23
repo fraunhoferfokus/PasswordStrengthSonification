@@ -1,9 +1,17 @@
+/** 
+ * Drone Synthesizer module
+ * @module
+ * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
+ */
 import { rand } from './PWSon_HelperFunctions.js'
 import { convolutionReverbFile } from './PWSon_Base.js'
 export { DroneSynth }
 
+/**
+ * DroneSynth class, provides a drone synthesizer
+ */
 class DroneSynth {
-
+    /** create a drone synthesizer object */
     constructor() {
         this.rmsMeter = new Tone.Meter()
         this.masterGain = new Tone.Gain(2)
@@ -50,9 +58,12 @@ class DroneSynth {
         }
     }
 
+    /** return the output object
+     * @returns {Object} drone synth output
+     */
     getOutput() { return this.masterGain }
 
-
+    /** @private */
     fluctuate() {
         for (var voice of this.voices) {
             voice.gain.gain.setTargetAtTime(rand(1, 10), Tone.now(), 0.03);
@@ -60,11 +71,13 @@ class DroneSynth {
         }
     }
 
+     /** @private */
     adjustGain() {
         if (this.rmsMeter.getLevel() > -16) this.masterGain.gain.value *= 0.95
         //console.log(this.rmsMeter.getLevel() + "\t" + this.masterGain.gain.value)
     }
 
+     /** @private */
     changeScale(incScalePos) {
         if (incScalePos) {
             this.scalePos += 1
@@ -83,6 +96,7 @@ class DroneSynth {
 
     }
 
+     /** start the continuous drone synth */
     play() {
         this.noiseSrc.start()
         this.reverb.wet.value = 0.1
@@ -91,6 +105,7 @@ class DroneSynth {
         this.intervalChangeScale = setInterval(() => { this.changeScale(true) }, 4000)
     }
 
+    /** stop the drone synth */
     stop() {
         this.noiseSrc.stop()
         this.reverb.wet.value = 0.0
@@ -99,6 +114,9 @@ class DroneSynth {
         clearInterval(this.intervalChangeScale)
     }
 
+    /** switch between major and minor scale
+     * @param {boolean} enable enable major scale
+     */
     enableMajorScale(enable) {
         this.majorScale = enable
         this.changeScale(false)
