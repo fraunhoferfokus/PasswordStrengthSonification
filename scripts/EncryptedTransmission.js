@@ -5,6 +5,7 @@
  */
 import { PWSon_Base } from './PWSon_Base.js'
 import { scaleBetweenTwoRanges } from './PWSon_HelperFunctions.js'
+import { encryptedTransmissionFile } from './PWSon_SoundFilePaths.js'
 import '../dep/base/Tone.js'
 export { EncryptedTransmission }
 
@@ -20,7 +21,7 @@ class EncryptedTransmission extends PWSon_Base {
         super(audioOutput)
         this.bitcrusher = new Tone.BitCrusher(16)
         this.distortionRadio = new Tone.Distortion()
-        this.radioPlayer = new Tone.Player({"url" : '../dep/encryptedTransmission/encryptedTransmission.mp3', "autostart" : true})
+        this.radioPlayer = new Tone.Player({ "url": encryptedTransmissionFile, "autostart": true })
         this.radioPlayer.loop = true
         this.radioPlayer.volume.value = 0
         this.radioCrossfader = new Tone.CrossFade()

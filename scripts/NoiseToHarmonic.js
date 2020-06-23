@@ -34,6 +34,7 @@ class NoiseToHarmonic extends PWSon_Base {
         this.harmonicNoiseCrossfader.fade.value = 0
         this.noiseSynth.start()
         this.harmonicSynth.play()
+        this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore // with the noise to harmonic sonification, a little reverb is always used
     }
 
     /** update password sonification with new score

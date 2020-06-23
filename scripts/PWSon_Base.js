@@ -4,11 +4,9 @@
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
 import { isBoolean } from './PWSon_HelperFunctions.js'
+import { convolutionReverbFile, commonPWNotificationFile } from './PWSon_SoundFilePaths.js'
 import '../dep/base/Tone.js'
-export { PWSon_Base, convolutionReverbFile }
-
-/** path to convolution reverb file, used by several sonifications */
-const convolutionReverbFile = '../dep/base/convReverb.mp3' // Impulse response from Lady Chapel, St. Albans Cathedral (Marcin Gorzel, Gavin Kearney, Aglaia Foteinou, Sorrel Hoare, Simon Shelley, Audiolab, University of York, www.openairlib.net)
+export { PWSon_Base }
 
 /**
  * Base class for all password sonifications
@@ -39,10 +37,10 @@ class PWSon_Base {
         this.volume = new Tone.Volume().connect(this.audioOutput)
         this.reverb = new Tone.Convolver(convolutionReverbFile).connect(this.volume)
         this.reverb.wet.value = 0
-        this.commonPwdPlayer = new Tone.Player("../dep/base/commonPWNotification.mp3").connect(this.volume);
+        this.commonPwdPlayer = new Tone.Player(commonPWNotificationFile).connect(this.volume);
         this.commonPwdPlayer.volume.value = -3
 
-        //TODO: dependency paths as properties with get/set
+        //TODO: dependency paths as properties with get/set - or in extra module
     }
 
     /** initialize password sonification */
