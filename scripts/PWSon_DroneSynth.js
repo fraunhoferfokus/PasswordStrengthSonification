@@ -4,7 +4,7 @@
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
 import { rand } from './PWSon_HelperFunctions.js'
-import { convolutionReverbFile } from './PWSon_Base.js'
+import { convolutionReverbFile } from './PWSon_SoundFilePaths.js'
 export { DroneSynth }
 
 /**
