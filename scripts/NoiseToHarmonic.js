@@ -4,7 +4,7 @@
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
 import { PWSon_Base } from './PWSon_Base.js'
-import { DroneSynth } from './PWSon_DroneSynth.js'
+import { PWSon_DroneSynth } from './PWSon_DroneSynth.js'
 import '../dep/base/Tone.js'
 export { NoiseToHarmonic }
 
@@ -20,7 +20,7 @@ class NoiseToHarmonic extends PWSon_Base {
         super(audioOutput)
         this.noiseSynth = new Tone.Noise()
         this.noiseVolume = new Tone.Volume(-27)
-        this.harmonicSynth = new DroneSynth()
+        this.harmonicSynth = new PWSon_DroneSynth()
         this.harmonicNoiseCrossfader = new Tone.CrossFade()
         this.noiseSynth.connect(this.noiseVolume)
         this.noiseVolume.connect(this.harmonicNoiseCrossfader, 0, 0)

@@ -1,8 +1,8 @@
 # Password Strength Sonification JavaScript Library
 ## Purpose
 This library provides JavaScript (ES6) modules to represent password strength scores with sound. Several different designs of these sonifications are implemented using [Tone.js]. They share the following features:
-- representing the passowrd score with sound
-- signaling if the password is ‘good enough’ (the score surpassing a configurable threshold value, default >7)
+- representing the password score with sound
+- signaling if the password is ‘good enough’ (the score surpassing a configurable threshold value, default >7 of 10)
 - (optional) gradual volume fade-in at the first few characters
 - (optional) warning sound if the password is one of the most common ones
 - (optional) reversing the mapping polarity, i.e. at a score of 0, the sound for score 10 is played (and vice versa) 
@@ -11,11 +11,11 @@ This library provides JavaScript (ES6) modules to represent password strength sc
 ## Password strength estimation
 The password strength estimation algorithm and list of most common passwords are not part of this library, and solely at your discretion. For your convenience and a working example, we included the [zxcvbn] algorithm by Wheeler and a list of common passwords by Miessner in the `dep/estimator/` subfolder. Our optional `PasswordChecker` module uses this algorithm. 
 
-When using a different password strength estimation algorithm, the password score of this algorithm needs to be normalized to a value between 0 (bad) and 10 (good). The method `scaleBetweenTwoRanges(...)` in the `PWSon_HelperFunctions.js` module provides this normalization.
+When using a different password strength estimation algorithm, the password score of this algorithm needs to be scaled/normalized to a value between 0 (bad) and 10 (excellent) for usage with the password sonification. The method `scaleBetweenTwoRanges(...)` in the `PWSon_HelperFunctions.js` module provides this normalization in form of linear scaling.
 
 ## General usage
 See the `examples/` subfolder for usage examples.
-The sonification designs can be used one by one or as part of a sonification group, where all run in parallel and are controlled by a `SonificationGroup` object.
+The sonification designs can be used one by one or as part of a sonification group, where all run in parallel and are controlled by an object of type  `SonificationGroup`. This class provides switching between the currently audible sonification and methods for changing parameters of all grouped sonifications.
 
 In your HTML, include a module script in the body which imports and initializes the sonification you want to use. 
 ```

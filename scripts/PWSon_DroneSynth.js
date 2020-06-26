@@ -5,12 +5,12 @@
  */
 import { rand } from './PWSon_HelperFunctions.js'
 import { convolutionReverbFile } from './PWSon_SoundFilePaths.js'
-export { DroneSynth }
+export { PWSon_DroneSynth }
 
 /**
  * DroneSynth class, provides a drone synthesizer
  */
-class DroneSynth {
+class PWSon_DroneSynth {
     /** create a drone synthesizer object */
     constructor() {
         this.rmsMeter = new Tone.Meter()
