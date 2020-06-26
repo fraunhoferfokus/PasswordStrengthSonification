@@ -12,36 +12,46 @@
         <p>
             <h1>Password Strength Sonification Example</h1>
         </p>
-        <form action="javascript:void(0);"><!-- javascript:void(0); prevents form submit / page reloading on Enter press in password input field -->
+        <form action="javascript:void(0);">
+            <!-- javascript:void(0); prevents form submit / page reloading on Enter press in password input field -->
             <p id="passwordarea">
-                <table><tr>
-                    <td><span class="largeFont">Password to test: <input type="password" id="pwd" value=""> </span></td>
-                    <td><input type="checkbox" id="showPassword"><label for="showPassword"> show password</label> &emsp; &emsp;
-                        <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound active</label></td></tr>
-                <tr><td></td>
-                    <td><input type="checkbox" id="enableCommonPWCheck" checked><label for="enableCommonPWCheck">enable checking and feedback for the 100k most common passwords</label></td></tr>
-                <tr><td></td>
-                    <td><input type="checkbox" id="enableGradualVolumeAtFewCharacters"><label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at the first few characters</label></td></tr></table>
+                <table>
+                    <tr>
+                        <td><span class="largeFont">Password to test: <input type="password" id="pwd" value=""> </span></td>
+                        <td><input type="checkbox" id="showPassword"><label for="showPassword"> show password</label>
+                            &emsp; &emsp;
+                            <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound
+                                active</label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="checkbox" id="enableCommonPWCheck" checked><label for="enableCommonPWCheck">enable
+                                checking and feedback for the 100k most common passwords</label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="checkbox" id="enableGradualVolumeAtFewCharacters"><label for="enableGradualVolumeAtFewCharacters">enable
+                                gradual volume fade-in at the first few characters</label></td>
+                    </tr>
+                </table>
             </p>
             <p id="pwInfoOutput" class="pwInfoOutput">Password infos: -<br></p>
-        </div></form>
+    </div>
+    </form>
 
     <script type="module">
-        /** load the password sonification itself and the password checker module to calculate the password score */
-        //import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js'
-        //import { TwoTones } from '../scripts/TwoTones.js'
+        /** load a password sonification and the password checker module to calculate the password score */
         import { NoiseToHarmonic } from '../scripts/NoiseToHarmonic.js'
-        //import { EncryptedTransmission } from '../scripts/EncryptedTransmission.js'
         import { PasswordChecker } from '../scripts/PasswordChecker.js'
-        
-    
+
+
         /** ---- procedure ---- */
         /** create new objects for the sonification and password checker, and initialize them before use (important!)*/
         let sonification = new NoiseToHarmonic()
         let passwordchecker = new PasswordChecker()
         sonification.init()
         passwordchecker.init()
-    
+
         /** register input events of the document (e.g. password field input, etc.) with the corresponding callback functions */
         registerInputEvents()
 
@@ -58,7 +68,7 @@
         function checkPwdAndPlaySound(pwd) {
             let text = "Password infos:<br> <br>"
             let pwdResult = passwordchecker.checkPwd(pwd)
-            
+
             if (pwdResult.isCommonPW) {
                 text += "Password is one of the 100k most common passwords, hence score=0!<br><br>"
                 sonification.playCommonPWEventSound()
@@ -66,10 +76,10 @@
 
             text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
             document.getElementById("pwInfoOutput").innerHTML = text
-            sonification.updateSonification(pwdResult.score, pwd.length)            
+            sonification.updateSonification(pwdResult.score, pwd.length)
         }
 
-        /** register input events with the corresponding callback functions */ 
+        /** register input events with the corresponding callback functions */
         function registerInputEvents() {
             // register event listener for input (doesn't matter if it's key up or down -> on every input change)
             document.getElementById("pwd").addEventListener('input', (e) => {
@@ -84,28 +94,17 @@
                 }
             });
             document.getElementById("soundActive").addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    sonification.volume.mute = false
-                } else {
-                    sonification.volume.mute = true
-                }
+                sonification.volume.mute = (e.target.checked == false)
             });
             document.getElementById("enableGradualVolumeAtFewCharacters").addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    sonification.enableGradualVolumeAtFewCharacters = true
-                } else {
-                    sonification.enableGradualVolumeAtFewCharacters = false
-                }
+                sonification.enableGradualVolumeAtFewCharacters = (e.target.checked == true)
             });
             document.getElementById("enableCommonPWCheck").addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    passwordchecker.enableCommonPWCheck = true
-                } else {
-                    passwordchecker.enableCommonPWCheck = false
-                }
+                passwordchecker.enableCommonPWCheck = (e.target.checked == true)
             });
         }
 
     </script>
 </body>
+
 </html>
