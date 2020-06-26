@@ -26,6 +26,7 @@ class PWSon_Base {
         this.reverbWetAmountAfterGoodEnoughScore = 0.33
         this._enableGradualVolumeAtFewCharacters = false
         this._fadeInCharacters = 4
+        this._reversePolarity = false
         //this.transferFunction = "linear"
 
         /* initialize main Tone.js components */
@@ -49,17 +50,16 @@ class PWSon_Base {
     }
 
     /** update password sonification with new score
-     * @param {number=} score score, between 0 and 10
+     * @param {number} score score, between 0 and 10
      * @param {numberCharacters=} numberCharacters number of characters typed (for gradual fade-in)
     */
     updateSonification(score = this.currentScore, numberCharacters = this.lastNumberCharacters) {
-        if (0 <= score <= 10) {
-            this.currentScore = score
-        } else {
-            throw Error('updateSonification: parameter score of ' + score.toString() + ' is not in allowed range 0...10')
-        }
-        this.lastNumberCharacters = numberCharacters
+        if (score < 0 || score > 10) throw Error('updateSonification: parameter score of ' + score.toString() + ' is not in allowed range 0...10')
+        
+        if (this._reversePolarity) score = 10 - score
+        this.currentScore = score
 
+        this.lastNumberCharacters = numberCharacters
         if (this._enableGradualVolumeAtFewCharacters) {
             if (numberCharacters > this._fadeInCharacters) {
                 this.volume.volume.value = 0
@@ -74,8 +74,16 @@ class PWSon_Base {
         this.commonPwdPlayer.restart()
     }
 
+    /* set audio output of this sonification (useful for use within SonificationGroups) */
+    setAudioOutput(audioOutput) {
+        this.volume.disconnect(this.audioOutput)
+        this.audioOutput = audioOutput
+        this.volume.sconnect(this.audioOutput)
+    }
+
 
     /* ----- Getters/Setters ----- */
+
     /** get if gradual volume fade-in at the first few characters is enabled */
     get enableGradualVolumeAtFewCharacters() { return this._enableGradualVolumeAtFewCharacters }
     /** enable/disable gradual volume fade-in at the first few characters 
@@ -99,6 +107,7 @@ class PWSon_Base {
     set fadeInCharacters(numberCharacters) {
         if (!(Number.isInteger(numberCharacters) && numberCharacters > 0)) throw Error('fadeInCharacters: parameter numberCharacters must be a positive Integer')
         this._fadeInCharacters = numberCharacters
+        this.updateSonification()
     }
 
     /** get the password score threshold, after which a password is considered 'good enough' */
@@ -109,6 +118,18 @@ class PWSon_Base {
     set goodEnoughThreshold(threshold) {
         if (isNaN(threshold)) throw Error('goodEnoughThreshold: parameter mus be a number')
         this._goodEnoughThreshold = threshold
+        this.updateSonification()
+    }
+
+    /** get if the mapping polarity (score to sound) is reversed, i.e. at a score of 0, the sound for score 10 is played (and vice versa) */
+    get reversePolarity() { return this._reversePolarity }
+    /** set if the mapping polarity (score to sound) is reversed, i.e. at a score of 0, the sound for score 10 is played (and vice versa)
+     * @type {boolean} 
+    */
+    set reversePolarity(reverse) {
+        if (!isBoolean(reverse)) throw Error('reversePolarity: parameter must be boolean')
+        this._reversePolarity = reverse
+        this.updateSonification()
     }
 
     /** get if audio is muted */
