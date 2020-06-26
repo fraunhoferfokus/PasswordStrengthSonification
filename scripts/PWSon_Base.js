@@ -55,7 +55,7 @@ class PWSon_Base {
     */
     updateSonification(score = this.currentScore, numberCharacters = this.lastNumberCharacters) {
         if (score < 0 || score > 10) throw Error('updateSonification: parameter score of ' + score.toString() + ' is not in allowed range 0...10')
-        
+
         if (this._reversePolarity) score = 10 - score
         this.currentScore = score
 
@@ -74,11 +74,21 @@ class PWSon_Base {
         this.commonPwdPlayer.restart()
     }
 
-    /* set audio output of this sonification (useful for use within SonificationGroups) */
+    /** set audio output of this sonification (useful for use within SonificationGroups) 
+     * @param {Object} audioOutput the audio output object
+    */
     setAudioOutput(audioOutput) {
         this.volume.disconnect(this.audioOutput)
         this.audioOutput = audioOutput
         this.volume.sconnect(this.audioOutput)
+    }
+
+    /** mute / unmute audio 
+     * @param {boolean} mute mute audio
+    */
+    muteAudio(mute) {
+        if (!isBoolean(mute)) throw Error('muteAudio: parameter must be boolean')
+        this.volume.mute = mute
     }
 
 
@@ -130,14 +140,5 @@ class PWSon_Base {
         if (!isBoolean(reverse)) throw Error('reversePolarity: parameter must be boolean')
         this._reversePolarity = reverse
         this.updateSonification()
-    }
-
-    /** get if audio is muted */
-    get muteAudio() { return this.volume.mute }
-    /** set if audio is muted 
-     * @type {boolean} 
-    */
-    set muteAudio(mute) {
-        this.volume.mute = mute
     }
 }
