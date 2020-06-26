@@ -94,7 +94,7 @@
                 }
             });
             document.getElementById("soundActive").addEventListener('change', (e) => {
-                sonification.muteAudio(e.target.checked == true)
+                sonification.muteAudio(e.target.checked == false)
             });
             document.getElementById("enableGradualVolumeAtFewCharacters").addEventListener('change', (e) => {
                 sonification.enableGradualVolumeAtFewCharacters = (e.target.checked == true)
