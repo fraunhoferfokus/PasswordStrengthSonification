@@ -80,7 +80,7 @@ class PWSon_Base {
     setAudioOutput(audioOutput) {
         this.volume.disconnect(this.audioOutput)
         this.audioOutput = audioOutput
-        this.volume.sconnect(this.audioOutput)
+        this.volume.connect(this.audioOutput)
     }
 
     /** mute / unmute audio 
@@ -102,11 +102,8 @@ class PWSon_Base {
     set enableGradualVolumeAtFewCharacters(enableFadeIn) {
         if (!isBoolean(enableFadeIn)) throw Error('enableGradualVolumeAtFewCharacters: parameter must be boolean')
         this._enableGradualVolumeAtFewCharacters = enableFadeIn
-        if (this._enableGradualVolumeAtFewCharacters) {
-            this.updateSonification()
-        } else {
-            this.volume.volume.value = 0
-        }
+        if (!this._enableGradualVolumeAtFewCharacters) this.volume.volume.value = 0
+        this.updateSonification()
     }
 
     /** get the number of characters, to which the volume is faded in */
@@ -139,6 +136,8 @@ class PWSon_Base {
     set reversePolarity(reverse) {
         if (!isBoolean(reverse)) throw Error('reversePolarity: parameter must be boolean')
         this._reversePolarity = reverse
+        // if polarity was reversed and is set back to normal, reverse the last saved current score back to normal as well
+        if (!this._reversePolarity) this.currentScore = 10 - this.currentScore
         this.updateSonification()
     }
 }
