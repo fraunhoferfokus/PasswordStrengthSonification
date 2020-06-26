@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+<head>
+    <title>PasswordStrengthSonification Group Example</title>
+    <link rel="stylesheet" type="text/css" href="style_examples.css">
+</head>
+
+<body>
+    <div class="centerbox">
+        <h1>Password Strength Sonification Group Example</h1>
+        <!-- javascript:void(0); prevents form submit / page reloading on Enter press in password input field -->
+        <form action="javascript:void(0);">
+            <div class="twoColumnLayout">
+                <div class="twoColumnLeft largeFont">Password to test: <input type="password" id="pwd" value=""> </div>
+                <div class="twoColumnLeft">
+                    <input type="checkbox" id="showPassword"><label for="showPassword"> show password</label> &emsp; &emsp;
+                    <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound active</label>
+                </div>
+            </div>
+            <div class="twoColumnLayout parameterbox">
+                <div class="twoColumnLeft">
+                    <span class="subHeading">Select Password Sonification</span><br>
+                    <input type="radio" name="selectSonification" value="twoTonesTypeFeedback">two tones[current, max]<br>
+                    <input type="radio" name="selectSonification" value="inverseParkingSensor">inverse parking sensor<br>
+                    <input type="radio" name="selectSonification" value="noiseToHarmonic">noise to harmonic<br>
+                    <input type="radio" name="selectSonification" value="encryptedTransmission">encrypted radio transmission
+                </div>
+                <div class="twoColumnRight">
+                    <span class="subHeading">Set Sonification Parameters</span><br>
+                    <input type="checkbox" id="enableCommonPWCheck" checked>
+                    <label for="enableCommonPWCheck">enable checking and feedback for the 100k most common passwords</label><br>
+                    <input type="checkbox" id="enableGradualVolumeAtFewCharacters">
+                    <label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at first few characters</label><br>
+                    <input type="checkbox" id="reversePolarity">
+                    <label for="reversePolarity">reverse mapping polarity</label>
+                </div>
+            </div>
+        </form>
+        <p id="pwInfoOutput" class="pwInfoOutput">Password infos: -<br></p>
+    </div>
+
+    <script type="module">
+        /** load the password sonifications and the SonificationGroup module and the password checker module to calculate the password score */
+        import { SonificationGroup } from '../scripts/SonificationGroup.js'
+        import { TwoTones } from '../scripts/TwoTones.js'
+        import { InverseParkingSensor } from '../scripts/InverseParkingSensor.js'
+        import { NoiseToHarmonic } from '../scripts/NoiseToHarmonic.js'
+        import { EncryptedTransmission } from '../scripts/EncryptedTransmission.js'
+        import { PasswordChecker } from '../scripts/PasswordChecker.js'
+
+
+        /* ---- procedure ---- */
+        /* create new objects for the sonification group, all sonifications, and password checker, and initialize them before use (important!)*/
+        let sonificationGroup = new SonificationGroup()
+        sonificationGroup.addSonification(new TwoTones(), 'Two Tones')
+        sonificationGroup.addSonification(new InverseParkingSensor(), 'Inverse Parking Sensor')
+        sonificationGroup.addSonification(new NoiseToHarmonic(), 'Noise to Harmonic')
+        sonificationGroup.addSonification(new EncryptedTransmission(), 'Encrypted Transmission')
+        sonificationGroup.initAllSonifications()
+        let passwordchecker = new PasswordChecker()
+        passwordchecker.init()
+
+        /** register input events of the document (e.g. password field input, etc.) with the corresponding callback functions */
+        registerInputEvents()
+
+        /* that's it - procedure finished. */
+
+
+        /* ---- functions ---- */
+
+        /* check password and play sound: 
+         * use the PasswordChecker object to estimate the password strength and determine if it is a common password.
+         * then, update the sonification group accordingly and display the password information on the screen
+         */
+        function checkPwdAndPlaySound(pwd) {
+            let text = "Password infos:<br> <br>"
+            let pwdResult = passwordchecker.checkPwd(pwd)
+
+            text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
+
+            if (pwdResult.isCommonPW) {
+                text += "<br>Password is one of the 100k most common passwords, hence score=0!<br>"
+                sonificationGroup.playCommonPWEventSound()
+            }
+
+            document.getElementById("pwInfoOutput").innerHTML = text
+            sonificationGroup.updateSonification(pwdResult.score, pwd.length)
+        }
+
+        /* register input events with the corresponding callback functions */
+        function registerInputEvents() {
+            // register event listener for input (doesn't matter if it's key up or down -> on every input change)
+            document.getElementById("pwd").addEventListener('input', (e) => {
+                checkPwdAndPlaySound(document.getElementById("pwd").value)
+            });
+            document.getElementById("showPassword").addEventListener('change', (e) => {
+                var pwinput = document.getElementById("pwd");
+                if (e.target.checked) {
+                    pwinput.type = "text";
+                } else {
+                    pwinput.type = "password";
+                }
+            });
+            document.getElementById("soundActive").addEventListener('change', (e) => {
+                sonificationGroup.muteAudio(e.target.checked == false)
+            });
+            document.getElementById("enableGradualVolumeAtFewCharacters").addEventListener('change', (e) => {
+                sonificationGroup.setAllEnableGradualVolumeAtFewCharacters(e.target.checked == true)
+            });
+            document.getElementById("enableCommonPWCheck").addEventListener('change', (e) => {
+                passwordchecker.enableCommonPWCheck = (e.target.checked == true)
+            });
+            document.getElementById("reversePolarity").addEventListener('change', (e) => {
+                sonificationGroup.setAllReversePolarity(e.target.checked == true)
+            });
+
+            let sonSelection = document.getElementsByName("selectSonification")
+            for (let i = 0; i < sonSelection.length; i++) {
+                sonSelection[i].addEventListener('change', (e) => {
+                    sonificationGroup.selectSonificationByIndex(i)
+                    sonificationGroup.updateSonification()
+                })
+            }
+        }
+    </script>
+</body>
+
+</html>
