@@ -9,35 +9,29 @@
 
 <body>
     <div class="centerbox">
-        <p>
-            <h1>Password Strength Sonification Example</h1>
-        </p>
+        <h1>Password Strength Sonification Example</h1>
+        <!-- javascript:void(0); prevents form submit / page reloading on Enter press in password input field -->
         <form action="javascript:void(0);">
-            <!-- javascript:void(0); prevents form submit / page reloading on Enter press in password input field -->
-            <p id="passwordarea">
-                <table>
-                    <tr>
-                        <td><span class="largeFont">Password to test: <input type="password" id="pwd" value=""> </span></td>
-                        <td><input type="checkbox" id="showPassword"><label for="showPassword"> show password</label>
-                            &emsp; &emsp;
-                            <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound
-                                active</label></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="checkbox" id="enableCommonPWCheck" checked><label for="enableCommonPWCheck">enable
-                                checking and feedback for the 100k most common passwords</label></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="checkbox" id="enableGradualVolumeAtFewCharacters"><label for="enableGradualVolumeAtFewCharacters">enable
-                                gradual volume fade-in at the first few characters</label></td>
-                    </tr>
-                </table>
-            </p>
-            <p id="pwInfoOutput" class="pwInfoOutput">Password infos: -<br></p>
+            <div class="twoColumnLayout">
+                <div class="twoColumnLeft largeFont">Password to test: <input type="password" id="pwd" value=""> </div>
+                <div class="twoColumnLeft">
+                    <input type="checkbox" id="showPassword"><label for="showPassword"> show password</label> &emsp; &emsp;
+                    <input type="checkbox" id="soundActive" checked><label for="soundActive">&#x1f50a;sound active</label>
+                </div>
+            </div>
+            <div class="parameterbox twoColumnLayout">
+                <div class="twoColumnLeft"> </div>
+                <div class="twoColumnRight">
+                    <span class="subHeading">Set Sonification Parameters</span><br>
+                    <input type="checkbox" id="enableCommonPWCheck" checked>
+                    <label for="enableCommonPWCheck">enable checking and feedback for the 100k most common passwords</label><br>
+                    <input type="checkbox" id="enableGradualVolumeAtFewCharacters">
+                    <label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at first few characters</label><br>
+                </div>
+            </div>
+        </form>
+        <p id="pwInfoOutput" class="pwInfoOutput">Password infos: -<br></p>
     </div>
-    </form>
 
     <script type="module">
         /** load a password sonification and the password checker module to calculate the password score */
@@ -69,12 +63,13 @@
             let text = "Password infos:<br> <br>"
             let pwdResult = passwordchecker.checkPwd(pwd)
 
+            text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
+
             if (pwdResult.isCommonPW) {
-                text += "Password is one of the 100k most common passwords, hence score=0!<br><br>"
+                text += "<br>Password is one of the 100k most common passwords, hence score=0!<br>"
                 sonification.playCommonPWEventSound()
             }
-
-            text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
+            
             document.getElementById("pwInfoOutput").innerHTML = text
             sonification.updateSonification(pwdResult.score, pwd.length)
         }
