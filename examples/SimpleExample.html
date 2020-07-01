@@ -54,27 +54,7 @@
 
         /** ---- functions ---- */
 
-        /** check password and play sound: 
-         * use the PasswordChecker object to estimate the password strength and determine if it is a common password.
-         * then, update the sonification accordingly and display the password information on the screen
-         * @param {String} pwd the password
-         */
-        function checkPwdAndPlaySound(pwd) {
-            let text = "Password infos:<br> <br>"
-            let pwdResult = passwordchecker.checkPwd(pwd)
-
-            text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
-
-            if (pwdResult.isCommonPW) {
-                text += "<br>Password is one of the 100k most common passwords, hence score=0!<br>"
-                sonification.playCommonPWEventSound()
-            }
-            
-            document.getElementById("pwInfoOutput").innerHTML = text
-            sonification.updateSonification(pwdResult.score, pwd.length)
-        }
-
-        /** register input events with the corresponding callback functions */
+        /* register input events with the corresponding callback functions */
         function registerInputEvents() {
             // register event listener for input (doesn't matter if it's key up or down -> on every input change)
             document.getElementById("pwd").addEventListener('input', (e) => {
@@ -97,6 +77,27 @@
             document.getElementById("enableCommonPWCheck").addEventListener('change', (e) => {
                 passwordchecker.enableCommonPWCheck = (e.target.checked == true)
             });
+        }
+
+
+        /** check password and play sound: 
+         * use the PasswordChecker object to estimate the password strength and determine if it is a common password.
+         * then, update the sonification accordingly and display the password information on the screen
+         * @param {String} pwd the password
+         */
+         function checkPwdAndPlaySound(pwd) {
+            let text = "Password infos:<br> <br>"
+            let pwdResult = passwordchecker.checkPwd(pwd)
+
+            text += "Our Password score: " + pwdResult.score.toFixed(1) + "/10"
+
+            if (pwdResult.isCommonPW) {
+                text += "<br>Password is one of the 100k most common passwords, hence score=0!<br>"
+                sonification.playCommonPWEventSound()
+            }
+            
+            document.getElementById("pwInfoOutput").innerHTML = text
+            sonification.updateSonification(pwdResult.score, pwd.length)
         }
 
     </script>
