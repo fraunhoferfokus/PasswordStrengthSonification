@@ -6,7 +6,7 @@
 import { PWSon_Base } from './PWSon_Base.js'
 import { scaleBetweenTwoRanges } from './PWSon_HelperFunctions.js'
 import { encryptedTransmissionFile } from './PWSon_SoundFilePaths.js'
-import '../dep/base/Tone.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.25/Tone.js'
 export { EncryptedTransmission }
 
 /**

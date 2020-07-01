@@ -5,7 +5,7 @@
  */
 import { isBoolean } from './PWSon_HelperFunctions.js'
 import { PWSon_Base } from './PWSon_Base.js'
-import '../dep/base/Tone.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.25/Tone.js'
 export { SonificationGroup }
 
 /**
@@ -47,7 +47,7 @@ class SonificationGroup {
     }
 
     /** select the currently active (volume unmuted) sonification 
-     * @param {Sonification Object} sonification the sonification object 
+     * @param {Object} sonification the sonification object 
      * @throws {Error} Error if sonification object is not found in the group or if it is not extending PWSon_Base
     */
     selectSonificationByObject(sonification) {

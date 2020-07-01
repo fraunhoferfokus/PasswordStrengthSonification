@@ -4,7 +4,7 @@
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
 import { PWSon_Base } from './PWSon_Base.js'
-import '../dep/base/Tone.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.25/Tone.js'
 export { InverseParkingSensor }
 
 /**
@@ -19,7 +19,6 @@ class InverseParkingSensor extends PWSon_Base {
         super(audioOutput)
         this.synth = new Tone.Synth()
         this.synth.connect(this.reverb)
-        this.noteEvent = new Tone.Event()
         this.synth.envelope.attack = 0.001
         this.synth.envelope.release = 0.2
     }
@@ -28,14 +27,14 @@ class InverseParkingSensor extends PWSon_Base {
     init() {
         super.init()
         var _this = this // we need the reference to instance in inline function, where 'this' means the inline function itself
-        this.noteEvent = new Tone.Event(function (time, param) {
+        this.noteEvent = new Tone.Event((time, param) => {
             _this.synth.triggerAttackRelease(440, '16n')
-        }, 0);
-        _this.noteEvent.set({
+        }, 0)
+        this.noteEvent.set({
             "loop": true,
             "loopEnd": 0.01,
-        });
-        this.noteEvent.start();
+        })
+        this.noteEvent.start()
     }
 
     /** update password sonification with new score
@@ -50,7 +49,7 @@ class InverseParkingSensor extends PWSon_Base {
         this.noteEvent.set({
             "loop": true,
             "loopEnd": deltaT,
-        });
+        })
 
         if (this.currentScore > this._goodEnoughThreshold) {
             this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore

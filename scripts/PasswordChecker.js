@@ -4,7 +4,7 @@
  * @module
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
-import "../dep/estimator/zxcvbn.js"
+import 'https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js'
 import { loadScript, isBoolean } from './PWSon_HelperFunctions.js'
 /** The PasswordChecker class */
 export { PasswordChecker }
@@ -32,8 +32,8 @@ class PasswordChecker {
 
     /** 
      * check password 
-     * returns the password score and if the password is in the list of common passwords.
-     * the check if the password is common is only performed if the class property enableCommonPWCheck is set
+     * returns an object with the password score and a boolean if the password is in the list of common passwords.
+     * The check if the password is common is only performed if the class property enableCommonPWCheck is set.
      * @param {string} pwd - the password to check
      * @returns {Object} PWret the return object with two properties:
      * @returns {number} PWret.score password score (between 0 and 10)

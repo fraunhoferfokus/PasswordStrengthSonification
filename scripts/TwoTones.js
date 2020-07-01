@@ -4,7 +4,7 @@
  * @author Otto Hans-Martin Lutz <otto.lutz@fokus.fraunhofer.de>
  */
 import { PWSon_Base } from './PWSon_Base.js'
-import '../dep/base/Tone.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.25/Tone.js'
 export { TwoTones }
 
 /**

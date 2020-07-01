@@ -5,7 +5,7 @@
  */
 import { isBoolean } from './PWSon_HelperFunctions.js'
 import { convolutionReverbFile, commonPWNotificationFile } from './PWSon_SoundFilePaths.js'
-import '../dep/base/Tone.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.12/Tone.js'
 export { PWSon_Base }
 
 /**
@@ -40,8 +40,6 @@ class PWSon_Base {
         this.reverb.wet.value = 0
         this.commonPwdPlayer = new Tone.Player(commonPWNotificationFile).connect(this.volume);
         this.commonPwdPlayer.volume.value = -3
-
-        //TODO: dependency paths as properties with get/set - or in extra module
     }
 
     /** initialize password sonification */
