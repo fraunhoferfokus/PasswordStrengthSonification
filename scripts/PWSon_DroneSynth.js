@@ -5,6 +5,7 @@
  */
 import { rand } from './PWSon_HelperFunctions.js'
 import { convolutionReverbFile } from './PWSon_SoundFilePaths.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.25/Tone.js'
 export { PWSon_DroneSynth }
 
 /**

@@ -5,7 +5,7 @@
  */
 import { isBoolean } from './PWSon_HelperFunctions.js'
 import { convolutionReverbFile, commonPWNotificationFile } from './PWSon_SoundFilePaths.js'
-import 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.12/Tone.js'
+import 'https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.25/Tone.js'
 export { PWSon_Base }
 
 /**
