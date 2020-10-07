@@ -138,4 +138,9 @@ class PWSon_Base {
         if (!this._reversePolarity) this.currentScore = 10 - this.currentScore
         this.updateSonification()
     }
+
+    /** start Tone Transport (disclosing Tone.Transport.start() to the outside) */
+    startToneTransport() {
+        Tone.Transport.start()
+    }
 }
