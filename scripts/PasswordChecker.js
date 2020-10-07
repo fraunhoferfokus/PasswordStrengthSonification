@@ -9,7 +9,7 @@ import { loadScript, isBoolean } from './PWSon_HelperFunctions.js'
 /** The PasswordChecker class */
 export { PasswordChecker }
 
-const commonPWFile = '../dep/estimator/100kMostCommonPWDs.js'
+var commonPWFile = '../dep/estimator/100kMostCommonPWDs.js'
 
 /** The Password Checker class */
 class PasswordChecker {
@@ -67,4 +67,18 @@ class PasswordChecker {
     set enableCommonPWCheck(enable) {
         if (isBoolean(enable)) this._enableCommonPWCheck = enable
     }
+
+    /** get file path of the list with common passwords
+     * @returns {string} file path
+     */
+    get commonPasswordFile() {
+        return commonPWFile
+    }
+    /** set file path of the list with common passwords
+     * @type {string} file path
+     */
+    set commonPasswordFile(filename) {
+        commonPWFile = filename
+    }
+
 }
