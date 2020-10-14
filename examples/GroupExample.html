@@ -34,7 +34,8 @@
                     <input type="checkbox" id="enableGradualVolumeAtFewCharacters">
                     <label for="enableGradualVolumeAtFewCharacters">enable gradual volume fade-in at first few characters</label><br>
                     <input type="checkbox" id="reversePolarity">
-                    <label for="reversePolarity">reverse mapping polarity</label>
+                    <label for="reversePolarity">reverse mapping polarity</label><br>
+                    <label for="volumeSlider">group volume </label><input type="range" min="-24" max="3" value="-3" class="slider" id="volumeSlider"><label for="volumeSlider" id="volumeText"> -3 dB</label><br>
                 </div>
             </div>
         </form>
@@ -59,6 +60,7 @@
         sonificationGroup.addSonification(new NoiseToHarmonic(), 'Noise to Harmonic')
         sonificationGroup.addSonification(new EncryptedTransmission(), 'Encrypted Transmission')
         sonificationGroup.initAllSonifications()
+        sonificationGroup.setGroupVolume(-3)
         let passwordchecker = new PasswordChecker()
         passwordchecker.init()
 
@@ -95,6 +97,10 @@
             });
             document.getElementById("reversePolarity").addEventListener('change', (e) => {
                 sonificationGroup.setAllReversePolarity(e.target.checked == true)
+            });
+            document.getElementById("volumeSlider").addEventListener('input', (e) => {
+                sonificationGroup.setGroupVolume(e.target.value)
+                document.getElementById("volumeText").innerHTML = " " + e.target.value + " dB"
             });
 
             let sonSelection = document.getElementsByName("selectSonification")

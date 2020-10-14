@@ -100,7 +100,9 @@ class SonificationGroup {
         this.list.map(son => { son.sonification.playCommonPWEventSound() })
     }
 
-    /* set audio output of this SonificationGroup */
+    /** set audio output of this SonificationGroup 
+     *  @param {object} audioOutput
+    */
     setAudioOutput(audioOutput) {
         this.volume.disconnect(this.audioOutput)
         this.audioOutput = audioOutput
@@ -113,6 +115,16 @@ class SonificationGroup {
     muteAudio(mute) {
         if (!isBoolean(mute)) throw Error('muteAudio: parameter must be boolean')
         this.volume.mute = mute
+    }
+
+    /** set group volume level in decibels (equals a master volume level behind all sonifications)
+     * @param {float} volume 
+     */
+    setGroupVolume(volume) {
+        if (isNaN(volume)) throw Error('setVolume: parameter must be a number')
+        let muteStatus = this.volume.mute
+        this.volume.volume.value = volume
+        this.volume.mute = muteStatus
     }
 
     /** for all sonifications in this group, enable/disable gradual volume fade-in at the first few characters 
