@@ -22,6 +22,8 @@ class SonificationGroup {
             this.audioOutput = Tone.Master
         }
         this.volume = new Tone.Volume().connect(this.audioOutput)
+        this.RMSmeter = new Tone.Meter() // average between last and current frame 
+        this.volume.connect(this.RMSmeter)
 
         this.currentScore = 0
         this.lastNumberCharacters = 0
@@ -125,6 +127,13 @@ class SonificationGroup {
         let muteStatus = this.volume.mute
         this.volume.volume.value = volume
         this.volume.mute = muteStatus
+    }
+
+    /** return the current RMS level (in dB)
+     * @returns {float} current RMS level (in dB)
+     */
+    getRMSLevel() {
+        return this.RMSmeter.getLevel()
     }
 
     /** for all sonifications in this group, enable/disable gradual volume fade-in at the first few characters 

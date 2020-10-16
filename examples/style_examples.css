@@ -31,8 +31,8 @@
  }
 
  .twoColumnLayout {
-    display: flex;
-    padding: 10px 10px;
+     display: flex;
+     padding: 10px 10px;
  }
 
  .twoColumnLeft {
@@ -43,20 +43,61 @@
      flex: 1;
  }
 
-
  /* slider */
-.slider {
-    position: relative;
-    width: 120px; /* Full-width */
-    top: 3px; /* so it seems vertically central aligned with the text */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  }
-  
-  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
-  .slider::-webkit-slider-thumb {
-    cursor: pointer; /* Cursor on hover */
-  }
-  
-  .slider::-moz-range-thumb {
-    cursor: pointer; /* Cursor on hover */
-  }
+
+ .slider {
+     position: relative;
+     width: 120px;
+     /* Full-width */
+     top: 3px;
+     /* so it seems vertically central aligned with the text */
+     opacity: 0.7;
+     /* Set transparency (for mouse-over effects on hover) */
+ }
+
+ /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+
+ .slider::-webkit-slider-thumb {
+     cursor: pointer;
+     /* Cursor on hover */
+ }
+
+ .slider::-moz-range-thumb {
+     cursor: pointer;
+     /* Cursor on hover */
+ }
+
+ /* audio level analyzer bar */
+
+ .audioLevelBox {
+     border: 2px double darkgray;
+     width: 310px;
+     font-size: small;
+     margin-top: 3px;
+     padding: 2px;
+     padding-left: 5px;
+ }
+
+ #audioLevelBarOuter {
+     position: relative;
+     width: 300px;
+     height: 14px;
+     background-color: lightgray;
+ }
+
+ #audioLevelBarInner {
+     position: absolute;
+     width: 1%;
+     height: 14px;
+     background-color: rgba(71, 140, 231, 0.8);
+ }
+
+ #audioLevelBarAverage {
+     position: absolute;
+     left: 0%;
+     top: -2px;
+     width: 1px;
+     height: 18px;
+     z-index: +1;
+     background-color: rgb(32, 32, 32);
+ }
