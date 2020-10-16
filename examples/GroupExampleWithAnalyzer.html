@@ -126,22 +126,27 @@
         /* setup and draw audio level analyzer bar and RMS level display*/
         function audioLevelAnalyzerBar(updateInterval) {
 
-            let visualizationData = new Array(Math.ceil(1000 / updateInterval)).fill(-100)
+            let audioLevelsBuffer = new Array(Math.ceil(1000 / updateInterval)).fill(-100)
+            let updateAudioLevelsOnDOM = true
 
             setInterval(() => {
                 let level = sonificationGroup.getRMSLevel()
-                document.getElementById("currAudioLevel").innerHTML = (level > -100 ? level.toFixed(1) : "< -100")
                 level = (level > -100 ? level : -100)
                 level = (level < 0 ? level : 0)
-                document.getElementById("audioLevelBarInner").style.width = (100 + level) + "%"
 
                 // Push a new visualizatioData point onto the back and remove the first
-                visualizationData.push(level)
-                visualizationData.shift()
+                audioLevelsBuffer.push(level)
+                audioLevelsBuffer.shift()
+                let avgLevel = calcAverage(audioLevelsBuffer)
 
-                let avgLevel = calcAverage(visualizationData)
-                document.getElementById("averagedAudioLevel").innerHTML = (avgLevel > -100 ? avgLevel.toFixed(1) : "< -100")
-                document.getElementById("audioLevelBarAverage").style.left = (100 + avgLevel) + "%"
+                updateAudioLevelsOnDOM = (level == avgLevel == -100) ? false : true
+
+                if (updateAudioLevelsOnDOM) {
+                    document.getElementById("currAudioLevel").innerHTML = (level > -100 ? level.toFixed(1) : "< -100")
+                    document.getElementById("audioLevelBarInner").style.width = (100 + level) + "%"
+                    document.getElementById("averagedAudioLevel").innerHTML = (avgLevel > -100 ? avgLevel.toFixed(1) : "< -100")
+                    document.getElementById("audioLevelBarAverage").style.left = (100 + avgLevel) + "%"
+                }
 
             }, updateInterval)
 
