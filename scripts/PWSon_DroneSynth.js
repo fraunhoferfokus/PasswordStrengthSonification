@@ -15,7 +15,7 @@ class PWSon_DroneSynth {
     /** create a drone synthesizer object */
     constructor() {
         this.rmsMeter = new Tone.Meter()
-        this.masterGain = new Tone.Gain(2)
+        this.masterGain = new Tone.Gain(12)
         this.masterGain.connect(this.rmsMeter)
         this.reverb = new Tone.Convolver(convolutionReverbFile).connect(this.masterGain)
         this.reverb.wet.value = 0.1
@@ -24,7 +24,7 @@ class PWSon_DroneSynth {
         this.compressor = new Tone.Compressor().connect(this.hpFilter)
         this.noiseSrc = new Tone.Noise("white");
         this.params = {
-            filterQ: 8000,
+            filterQ: 16000,
             rolloff: -48
         }
         this.scale = ["B3", "D3", "F#3", "B4", "D4", "F#4"]//, "B5", "D5", "F#5"]
@@ -67,14 +67,14 @@ class PWSon_DroneSynth {
     /** @private */
     fluctuate() {
         for (var voice of this.voices) {
-            voice.gain.gain.setTargetAtTime(rand(1, 10), Tone.now(), 0.03);
+            voice.gain.gain.setTargetAtTime(rand(2, 6), Tone.now(), 0.03);
             voice.panner.pan.setTargetAtTime(rand(-0.5, 0.5), Tone.now(), 0.03);
         }
     }
 
      /** @private */
     adjustGain() {
-        if (this.rmsMeter.getLevel() > -16) this.masterGain.gain.value *= 0.95
+        if (this.rmsMeter.getLevel() > -12) this.masterGain.gain.value *= 0.95
         //console.log(this.rmsMeter.getLevel() + "\t" + this.masterGain.gain.value)
     }
 
