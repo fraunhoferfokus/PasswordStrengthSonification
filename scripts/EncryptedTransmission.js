@@ -49,7 +49,7 @@ class EncryptedTransmission extends PWSon_Base {
     updateSonification(score, numberCharacters = this.lastNumberCharacters) {
         super.updateSonification(score, numberCharacters)
 
-        if (this.radioPlayer.state != "started") this.radioPlayer.start();
+        if (this.radioPlayer.loaded == true && this.radioPlayer.state != "started") this.radioPlayer.start();
         // make sure that the clean radio sound is perceived loud enough, as the noise adds quite some power to the overall signal
         if (this.currentScore < 0.5) { this.radioPlayer.volume.value = 6 } else { this.radioPlayer.volume.value = 0 }
         this.distortionRadio.distortion = this.currentScore / 10.0
