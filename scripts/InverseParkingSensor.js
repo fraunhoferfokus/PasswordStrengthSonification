@@ -51,10 +51,7 @@ class InverseParkingSensor extends PWSon_Base {
             "loopEnd": deltaT,
         })
 
-        if (this.currentScore > this._goodEnoughThreshold) {
-            this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore
-        }
-        else { this.reverb.wet.value = 0 }
+        this.applyGoodEnoughScore(score)
     }
 
 }

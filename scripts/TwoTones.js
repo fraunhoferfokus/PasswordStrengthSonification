@@ -37,10 +37,7 @@ class TwoTones extends PWSon_Base {
         this.synth.triggerAttackRelease(freq, '16n')
         this.synth.triggerAttackRelease(this.maxFreq, '16n', '+16n')
 
-        if (this.currentScore > this._goodEnoughThreshold) {
-            this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore
-        }
-        else { this.reverb.wet.value = 0 }
+        this.applyGoodEnoughScore(score)
     }
 
 }

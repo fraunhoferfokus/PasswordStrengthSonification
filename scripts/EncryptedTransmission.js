@@ -57,10 +57,7 @@ class EncryptedTransmission extends PWSon_Base {
         let bitvalue = scaleBetweenTwoRanges(10 - this.currentScore, 0, 10, 0, 16) // invert ourScore, then scale it between 1 and 16 for bit crusher
         this.bitcrusher.bits = bitvalue
 
-        if (this.currentScore > this._goodEnoughThreshold) {
-            this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore
-        }
-        else { this.reverb.wet.value = 0 }
+        this.applyGoodEnoughScore(score)
     }
 
 }

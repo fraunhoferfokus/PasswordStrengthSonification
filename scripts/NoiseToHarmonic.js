@@ -43,9 +43,17 @@ class NoiseToHarmonic extends PWSon_Base {
      */
     updateSonification(score, numberCharacters = this.lastNumberCharacters) {
         super.updateSonification(score, numberCharacters)
-
         this.harmonicNoiseCrossfader.fade.value = this.currentScore / 10.0
-        if (this.currentScore > this._goodEnoughThreshold) {
+        this.applyGoodEnoughScore(score)
+    }
+
+    /**
+     * Apply sound changes if the good enough score is passed
+     * Overloading the method from PWSon_Base as we don't use the reverb here but a scale change
+     * @param {number} score 
+     */
+    applyGoodEnoughScore(score) {
+        if (score > this._goodEnoughThreshold) {
             this.harmonicSynth.enableMajorScale(true)
         }
         else {

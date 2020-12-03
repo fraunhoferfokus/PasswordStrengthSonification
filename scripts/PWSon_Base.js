@@ -89,6 +89,18 @@ class PWSon_Base {
         this.volume.mute = mute
     }
 
+    /**
+     * Apply sound changes if the good enough score is passed
+     * @param {number} score 
+     */
+    applyGoodEnoughScore(score){
+        // use raw score instead of this.currentScore to apply good enough score changes independently from inversePolarity score inversions
+        if (score > this._goodEnoughThreshold) {
+            this.reverb.wet.value = this.reverbWetAmountAfterGoodEnoughScore
+        }
+        else { this.reverb.wet.value = 0 }
+    }
+
 
     /* ----- Getters/Setters ----- */
 
