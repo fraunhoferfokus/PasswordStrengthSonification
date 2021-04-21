@@ -17,9 +17,9 @@ class InverseParkingSensor extends PWSon_Base {
     */
     constructor(audioOutput = null) {
         super(audioOutput)
-        this.volEqual = new Tone.Volume(-3).connect(this.reverb); // volume component to make the sonification volumes roughly equal (before mixer)
+        this.volume.volume.value = -3;
         this.synth = new Tone.Synth()
-        this.synth.connect(this.volEqual)
+        this.synth.connect(this.reverb)
         this.synth.envelope.attack = 0.001
         this.synth.envelope.release = 0.2
     }

@@ -26,6 +26,7 @@ class NoiseToHarmonic extends PWSon_Base {
         this.noiseVolume.connect(this.harmonicNoiseCrossfader, 0, 0)
         this.harmonicSynth.getOutput().connect(this.harmonicNoiseCrossfader, 0, 1)
         this.harmonicNoiseCrossfader.connect(this.volume)
+        this.volume.volume.value = +2;
     }
 
     /** initialize sonification */
